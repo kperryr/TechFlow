@@ -86,12 +86,27 @@ public class TicketService {
 
                 // Check if ticket exists
                 if (ticketOptional.isPresent()) {
-                        Ticket ticket = ticketOptional.get();
+                        Ticket ticket = ticketOptional.get(); // assigning the ticket object to the ticket variable
                         ticket.setPriority(newPriority);
                         return ticketRepository.save(ticket);
                 } else {
                         throw new TicketNotFoundException("Ticket not found with ID: " + ticketId);
                 }
+        }
 
+        // Update client department
+        public Ticket updateClientDepartment(Integer ticketId, String newClientDepartment) {
+                // Fetch the ticket details
+                Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
+
+                // Check if ticket exist
+                if (ticketOptional.isPresent()) {
+                        Ticket ticket = ticketOptional.get(); // if present, we hold it under "ticket"
+                        ticket.setClientDepartment(newClientDepartment);
+                        return ticketRepository.save(ticket);
+
+                } else {
+                        throw new TicketNotFoundException("Ticket not found with ID: " + ticketId);
+                }
         }
 }
