@@ -28,7 +28,7 @@ public class ListTicketsController {
         // Display the create ticket form
         @GetMapping("/create")
         public String displayCreateTicketForm(Model model) {
-                model.addAttribute("ticket", new Ticket());
+                // model.addAttribute("ticket", new Ticket());
                 return "tickets/create";
         }
 
