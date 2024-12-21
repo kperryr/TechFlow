@@ -39,7 +39,7 @@ public class TicketService {
         }
 
         // Delete a ticket
-        public void deleteTicket(int ticketId) {
+        public void deleteTicket(Integer ticketId) {
                 ticketRepository.deleteById(ticketId);
         }
 
@@ -47,11 +47,11 @@ public class TicketService {
         // Using optional<> since it returns null or the ticket
         public Ticket updateTicketStatus(Integer ticketId, String newStatus) {
                 // Fetch the ticket by its Id
-                Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
+                Optional<Ticket> retrievedTicket = ticketRepository.findById(ticketId);
 
                 // Check if the ticket exists
-                if (ticketOptional.isPresent()) {
-                        Ticket ticket = ticketOptional.get();
+                if (retrievedTicket.isPresent()) {
+                        Ticket ticket = retrievedTicket.get();
                         // Update the status
                         //ticket.setStatus(newStatus)
                         ticket.setLastEdited();
@@ -65,11 +65,11 @@ public class TicketService {
         // Add or update note
         public Ticket addOrUpdateNote(Integer ticketId, String note) {
                 // Fetch the ticket by its ticketId
-                Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
+                Optional<Ticket> retrievedTicket = ticketRepository.findById(ticketId);
 
                 // Check if the ticket exists
-                if (ticketOptional.isPresent()) {
-                        Ticket ticket = ticketOptional.get();
+                if (retrievedTicket.isPresent()) {
+                        Ticket ticket = retrievedTicket.get();
                         // Update the note
                         ticket.setNotes(note);
                         return ticketRepository.save(ticket);
@@ -82,11 +82,11 @@ public class TicketService {
         // Update ticket priority
         public Ticket updateTicketPriority(Integer ticketId, int newPriority) {
                 // Fetch the ticket by its ticketId
-                Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
+                Optional<Ticket> retrievedTicket = ticketRepository.findById(ticketId);
 
                 // Check if ticket exists
-                if (ticketOptional.isPresent()) {
-                        Ticket ticket = ticketOptional.get(); // assigning the ticket object to the ticket variable
+                if (retrievedTicket.isPresent()) {
+                        Ticket ticket = retrievedTicket.get(); // assigning the ticket object to the ticket variable
                         ticket.setPriority(newPriority);
                         return ticketRepository.save(ticket);
                 } else {
@@ -97,14 +97,28 @@ public class TicketService {
         // Update client department
         public Ticket updateClientDepartment(Integer ticketId, String newClientDepartment) {
                 // Fetch the ticket details
-                Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
+                Optional<Ticket> retrievedTicket = ticketRepository.findById(ticketId);
 
                 // Check if ticket exist
-                if (ticketOptional.isPresent()) {
-                        Ticket ticket = ticketOptional.get(); // if present, we hold it under "ticket"
+                if (retrievedTicket.isPresent()) {
+                        Ticket ticket = retrievedTicket.get(); // if present, we hold it under "ticket"
                         ticket.setClientDepartment(newClientDepartment);
                         return ticketRepository.save(ticket);
+                } else {
+                        throw new TicketNotFoundException("Ticket not found with ID: " + ticketId);
+                }
+        }
 
+        // Update ticket details
+        public Ticket updateTicketDetails(Integer ticketId, String newTicketDetails) {
+                // Fetch the ticket detials
+                Optional<Ticket> retrievedTicket = ticketRepository.findById(ticketId);
+
+                // Check if ticket exist
+                if (retrievedTicket.isPresent()) {
+                        Ticket ticket = retrievedTicket.get();
+                        ticket.setDetails(newTicketDetails);
+                        return ticketRepository.save(ticket);
                 } else {
                         throw new TicketNotFoundException("Ticket not found with ID: " + ticketId);
                 }
