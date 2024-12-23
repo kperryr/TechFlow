@@ -1,10 +1,9 @@
 package org.taskntech.tech_flow.controllers;
 
-import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,14 +31,14 @@ public class ListTicketsController {
                 return "tickets/create";
         }
 
-        // Used Springs BindingResult with @Valid instead of Try/Catch
+        // Using a Try/Catch, originally tried BindingResult but didnt work properly
         @PostMapping("/create")
-        public String processCreateTicketForm(@ModelAttribute @Valid Ticket ticket,
-                                              BindingResult result) {
-                if (result.hasErrors()) { // If validation fails...
-                        return "tickets/create"; // stay on the form page...
+        public String processCreateTicketForm(@ModelAttribute Ticket ticket) {
+                try {
+                        ticketService.createTicket(ticket);
+                        return "redirect:/tickets";
+                } catch (ValidationException e) {
+                        return "tickets/create";
                 }
-                ticketService.createTicket(ticket); // Save the valid ticket
-                return "redirect:/tickets"; // Then redirect to the ticket list
         }
 }
