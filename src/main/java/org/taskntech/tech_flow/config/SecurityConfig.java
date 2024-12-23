@@ -1,5 +1,6 @@
 package org.taskntech.tech_flow.config;
 
+import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,13 +21,13 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
         return http
-                .authorizeHttpRequests( auth -> {
-                    //auth.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll();
-                    auth.requestMatchers("/").permitAll(); //(mvc.pattern("/my/controller/**")).hasAuthority("controller");
+                .authorizeHttpRequests(auth -> {
+                    auth.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll();
+                    auth.requestMatchers("/", "/login", "/error").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .oauth2Login(form -> form.defaultSuccessUrl("/", true))
-                //.formLogin(withDefaults()) //form -> form.defaultSuccessUrl("/", true)
+                .logout(logout -> logout.logoutSuccessUrl("/"))
                 .build();
     }
 
