@@ -17,6 +17,11 @@ public class TicketService {
         @Autowired // Used to inject dependencies
         private TicketRepository ticketRepository; // Used to access the repository
 
+        // Add setter for testing
+        public void setTicketRepository(TicketRepository ticketRepository) {
+                this.ticketRepository = ticketRepository;
+        }
+
         // Create a new ticket
         public Ticket createTicket(Ticket ticket) {
                 return ticketRepository.save(ticket);
@@ -27,7 +32,6 @@ public class TicketService {
                 List<Ticket> tickets = new ArrayList<>(); // creating an empty list to store the tickets
                 ticketRepository.findAll().forEach(tickets::add); // Iterates over repo/database, returns all tickets and adds them to the list
                 return tickets;
-
         }
 
         // Update a ticket

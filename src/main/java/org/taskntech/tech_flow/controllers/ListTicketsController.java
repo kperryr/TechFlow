@@ -24,6 +24,7 @@ public class ListTicketsController {
                 return "tickets/list";
         }
 
+
         // Display the create ticket form
         @GetMapping("/create")
         public String displayCreateTicketForm(Model model) {
@@ -40,5 +41,9 @@ public class ListTicketsController {
                 } catch (ValidationException e) {
                         return "tickets/create";
                 }
+        }
+
+        public void setTicketService(TicketService ticketService) {
+                this.ticketService = ticketService;
         }
 }
