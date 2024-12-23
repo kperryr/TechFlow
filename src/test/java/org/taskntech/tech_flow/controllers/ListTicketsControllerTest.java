@@ -2,7 +2,6 @@ package org.taskntech.tech_flow.controllers;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.ui.Model;
-import org.taskntech.tech_flow.controllers.ListTicketsController;
 import org.taskntech.tech_flow.models.Ticket;
 import java.util.Collection;
 import java.util.HashMap;
