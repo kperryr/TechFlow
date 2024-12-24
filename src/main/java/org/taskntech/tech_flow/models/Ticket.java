@@ -50,6 +50,11 @@ public class Ticket extends AbstractEntity {
         setDateSubmitted();
     }
 
+    // Added a No-argument constructor
+    public Ticket() {
+        super("", ""); // Set default values for abstract entity fields
+    }
+
     public String getDetails() {
         return details;
     }
