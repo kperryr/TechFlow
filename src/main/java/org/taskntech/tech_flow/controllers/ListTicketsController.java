@@ -1,9 +1,11 @@
 package org.taskntech.tech_flow.controllers;
 
+import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,31 +20,41 @@ public class ListTicketsController {
         @Autowired
         private TicketService ticketService;
 
+        // List all tickets.
         @GetMapping
         public String listTickets(Model model) {
                 model.addAttribute("tickets", ticketService.getAllTickets());
                 return "tickets/list";
         }
 
-
-        // Display the create ticket form
+        // Display the form to create a new ticket.
         @GetMapping("/create")
         public String displayCreateTicketForm(Model model) {
-                // model.addAttribute("ticket", new Ticket());
+                model.addAttribute("ticket", new Ticket()); // Ensure the form has a ticket object
                 return "tickets/create";
         }
 
-        // Using a Try/Catch, originally tried BindingResult but didnt work properly
+        // Process the ticket creation form.
         @PostMapping("/create")
-        public String processCreateTicketForm(@ModelAttribute Ticket ticket) {
+        public String processCreateTicketForm(
+                @Valid @ModelAttribute("ticket") Ticket ticket,
+                BindingResult bindingResult,
+                Model model) {
+                if (bindingResult.hasErrors()) {
+                        model.addAttribute("errorMessage", "Please fix the errors in the form");
+                        return "tickets/create";
+                }
+
                 try {
                         ticketService.createTicket(ticket);
                         return "redirect:/tickets";
                 } catch (ValidationException e) {
+                        model.addAttribute("errorMessage", e.getMessage());
                         return "tickets/create";
                 }
         }
 
+        // Setter for unit testing
         public void setTicketService(TicketService ticketService) {
                 this.ticketService = ticketService;
         }

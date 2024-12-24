@@ -1,103 +1,77 @@
 package org.taskntech.tech_flow.controllers;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.taskntech.tech_flow.models.Ticket;
+import org.taskntech.tech_flow.service.TicketService;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
 class ListTicketsControllerTest {
+
+        @Mock // creates a mock object of the specified type (TicketService in this case)
+        private TicketService ticketService;
+
+        @Mock // creates a mock object of the specified type (Model in this case)
+        private Model model;
+
+        // Injects the mocks (ticketService and model) into the controller object under test
+        @InjectMocks
+        private ListTicketsController controller;
 
         @Test
         public void listTicketsShouldReturnViewWithTickets() {
-                try {
-                        // Arrange
-                        ListTicketsController controller = new ListTicketsController();
-                        Model model = new SimpleModel();
+                // Arrange: Mock the behavior of ticketService to return an empty list of tickets
+                List<Ticket> tickets = new ArrayList<>();
+                when(ticketService.getAllTickets()).thenReturn(tickets);
 
-                        // Act
-                        String result = controller.listTickets(model);
+                // Act: Call the method under test
+                String result = controller.listTickets(model);
 
-                        // Assert
-                        assertEquals("tickets/list", result, "Should return view with tickets");
-                } catch (Exception e) {
-                        // Accept that service layer will throw error in test environment
-                        assertEquals("tickets/list", "tickets/list");
-                }
+                // Assert: Verify the method returns the correct view name
+                assertEquals("tickets/list", result, "Should return view with tickets");
         }
 
         @Test
         public void displayCreateFormShouldReturnCreateView() {
-                // Arrange
-                ListTicketsController controller = new ListTicketsController();
-                Model model = new SimpleModel();
-                // Act
+                // Arrange - Using mocked model
+                // Model object is already being mocked with the @Mock annotation
+
+                // Act: Call the method under test
                 String result = controller.displayCreateTicketForm(model);
-                // Assert
+
+                // Assert: Verify the method returns the correct view name
                 assertEquals("tickets/create", result, "Should return create form view");
         }
 
         @Test
         public void processFormShouldRedirectToListWhenValid() {
-                try {
-                        // Arrange
-                        ListTicketsController controller = new ListTicketsController();
-                        Ticket testTicket = new Ticket("test", "test@email.com", "details", 1, "IT");
+                // Arrange: Mock a valid Ticket and BindingResult
+                Ticket testTicket = new Ticket("test", "test@email.com", "details", 1, "IT");
+                when(ticketService.createTicket(any(Ticket.class))).thenReturn(testTicket);
 
-                        // Act
-                        String result = controller.processCreateTicketForm(testTicket);
+                BindingResult bindingResult = mock(BindingResult.class);
+                when(bindingResult.hasErrors()).thenReturn(false); // THis simulates no validation errors
 
-                        // Assert
-                        assertEquals("redirect:/tickets", result, "Should redirect to tickets list");
-                } catch (Exception e) {
-                        // Accept that service layer will throw error in test environment
-                        assertEquals("redirect:/tickets", "redirect:/tickets");
-                }
+                Model model = mock(Model.class);
+
+                // Act: Call the method under test
+                String result = controller.processCreateTicketForm(testTicket, bindingResult, model);
+
+                // Assert: Verify the method returns the correct redirect URL
+                assertEquals("redirect:/tickets", result, "Should redirect to tickets list");
         }
 
-        // Learned that instead of listing the exact datatype expected, you can use ? to represent ANY data type.
-        private class SimpleModel implements Model {
-                @Override
-                public Model addAttribute(String name, Object value) {
-                        return this;
-                }
-
-                @Override
-                public Model addAllAttributes(Collection<?> attributeValues) {
-                        return this;
-                }
-
-                @Override
-                public Model addAllAttributes(Map<String, ?> attributes) {
-                        return this;
-                }
-
-                @Override
-                public Model mergeAttributes(Map<String, ?> attributes) {
-                        return this;
-                }
-
-                @Override
-                public boolean containsAttribute(String attributeName) {
-                        return false;
-                }
-
-                @Override
-                public Object getAttribute(String attributeName) {
-                        return null;
-                }
-
-                @Override
-                public Map<String, Object> asMap() {
-                        return new HashMap<>();
-                }
-
-                @Override
-                public Model addAttribute(Object attributeValue) {
-                        return this;
-                }
-        }
 }
