@@ -10,7 +10,9 @@ import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
-@EnableWebSecurity(debug = true) //this annotation exposes SecurityFilterChain bean.
+
+//this annotation exposes SecurityFilterChain bean & enables Spring Security integration with Spring MVC.
+@EnableWebSecurity(debug = true)
 public class SecurityConfig {
 
     @Bean
