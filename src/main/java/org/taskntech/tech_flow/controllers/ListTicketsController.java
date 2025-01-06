@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.taskntech.tech_flow.models.StatusUpdates;
 import org.taskntech.tech_flow.models.Ticket;
 import org.taskntech.tech_flow.service.TicketService;
 
@@ -52,6 +50,19 @@ public class ListTicketsController {
                         model.addAttribute("errorMessage", e.getMessage());
                         return "tickets/create";
                 }
+        }
+
+        // Using PutMapping instead of PostMapping, PUT is used to update an existing resource
+        @PutMapping("/{ticketId}/status")
+        public String updateStatus(@PathVariable Integer ticketId,
+                                   @RequestParam StatusUpdates status) {
+                ticketService.updateTicketStatus(ticketId, status);
+                return "redirect:/tickets";
+        }
+
+        @ModelAttribute("statusUpdates")
+        public StatusUpdates[] statusUpdates() {
+                return StatusUpdates.values();
         }
 
         // Setter for unit testing

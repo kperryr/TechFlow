@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.taskntech.tech_flow.data.TicketRepository;
 import org.taskntech.tech_flow.exceptions.TicketNotFoundException;
+import org.taskntech.tech_flow.models.StatusUpdates;
 import org.taskntech.tech_flow.models.Ticket;
 
 
@@ -49,7 +50,7 @@ public class TicketService {
 
         // Update ticket status
         // Using optional<> since it returns null or the ticket
-        public Ticket updateTicketStatus(Integer ticketId, String newStatus) {
+        public Ticket updateTicketStatus(Integer ticketId, StatusUpdates newStatus) {
                 // Fetch the ticket by its Id
                 Optional<Ticket> retrievedTicket = ticketRepository.findById(ticketId);
 
@@ -57,7 +58,7 @@ public class TicketService {
                 if (retrievedTicket.isPresent()) {
                         Ticket ticket = retrievedTicket.get();
                         // Update the status
-                        //ticket.setStatus(newStatus)
+                        ticket.setStatus(newStatus);
                         ticket.setLastEdited();
                         return ticketRepository.save(ticket);
                 } else {
