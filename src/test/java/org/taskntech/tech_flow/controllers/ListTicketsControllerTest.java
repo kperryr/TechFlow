@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.taskntech.tech_flow.models.PriorityValue;
 import org.taskntech.tech_flow.models.Ticket;
 import org.taskntech.tech_flow.service.TicketService;
 
@@ -59,7 +60,7 @@ class ListTicketsControllerTest {
         @Test
         public void processFormShouldRedirectToListWhenValid() {
                 // Arrange: Mock a valid Ticket and BindingResult
-                Ticket testTicket = new Ticket("test", "test@email.com", "details", 1, "IT");
+                Ticket testTicket = new Ticket("test", "test@email.com", "details", PriorityValue.LOW, "IT");
                 when(ticketService.createTicket(any(Ticket.class))).thenReturn(testTicket);
 
                 BindingResult bindingResult = mock(BindingResult.class);
