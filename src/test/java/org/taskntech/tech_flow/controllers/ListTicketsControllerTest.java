@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -73,6 +74,37 @@ class ListTicketsControllerTest {
 
                 // Assert: Verify the method returns the correct redirect URL
                 assertEquals("redirect:/tickets", result, "Should redirect to tickets list");
+        }
+
+        @Test
+        public void processFormShouldReturnCreateViewWhenInvalid() {
+                // Arrange: Mock an invalid Ticket and BindingResult
+                Ticket testTicket = new Ticket();
+                BindingResult bindingResult = mock(BindingResult.class);
+                when(bindingResult.hasErrors()).thenReturn(true); // Simulate validation errors
+
+                Model model = mock(Model.class);
+
+                // Act: Call the method under test
+                String result = controller.processCreateTicketForm(testTicket, bindingResult, model);
+
+                // Assert: Verify the method returns the create form view
+                assertEquals("tickets/create", result, "Should return create view when validation fails");
+        }
+
+        @Test
+        public void listTicketsShouldHandleNullOrEmptyList() {
+                // Arrange: Simulate ticketService returning null
+                when(ticketService.getAllTickets()).thenReturn(null);
+
+                // Act
+                String result = controller.listTickets(model);
+
+                // Assert
+                assertEquals("tickets/list", result, "Should return tickets list view");
+
+                // Verify model is populated with an empty list instead of null
+                Mockito.verify(model).addAttribute("tickets", new ArrayList<>());
         }
 
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head}"></head>
 <body class="p-8">
 <h1 class="text-xl mb-4">Create New Ticket</h1>
@@ -7,48 +7,56 @@
 <!-- Form with max width and POST method -->
 <form method="POST" th:action="@{/tickets/create}" th:object="${ticket}" class="max-w-lg">
     <!-- Error message display -->
-    <div th:if="${errorMessage}" class="bg-red-100 text-red-700 p-2 mb-4">
+    <div th:if="${errorMessage}" class="bg-red-100 border border-red-500 text-red-700 p-3 rounded mb-4">
         <span th:text="${errorMessage}"></span>
     </div>
 
     <!-- Name input field -->
     <div class="mb-4">
-        <label class="block mb-2">Name</label>
-        <input class="w-full p-2 border" type="text" th:field="*{name}" required>
+        <label for="name" class="block mb-2 font-semibold">Name</label>
+        <input id="name" class="w-full p-2 border rounded" type="text" th:field="*{name}" required>
     </div>
 
     <!-- Email input field -->
     <div class="mb-4">
-        <label class="block mb-2">Email</label>
-        <input class="w-full p-2 border" type="email" th:field="*{email}" required>
+        <label for="email" class="block mb-2 font-semibold">Email</label>
+        <input id="email" class="w-full p-2 border rounded" type="email" th:field="*{email}" required>
     </div>
 
     <!-- Details textarea -->
     <div class="mb-4">
-        <label class="block mb-2">Details</label>
-        <textarea class="w-full p-2 border" th:field="*{details}" required></textarea>
+        <label for="details" class="block mb-2 font-semibold">Details</label>
+        <textarea id="details" class="w-full p-2 border rounded" th:field="*{details}" required></textarea>
     </div>
 
     <!-- Priority selection dropdown -->
     <div class="mb-4">
-        <label class="block mb-2">Priority</label>
-        <select class="w-full p-2 border" th:field="*{priority}" required>
+        <label for="priority" class="block mb-2 font-semibold">Priority</label>
+        <select id="priority" class="w-full p-2 border rounded" th:field="*{priority}" required>
             <option th:each="priority : ${priorityValues}"
-                    th:value="${priority}"
-                    th:text="${priority}">
+                    th:value="${priority.name()}"
+                    th:text="${priority}"
+                    th:attr="selected=${priority.name() == ticket.priority?.name()}">
             </option>
         </select>
+
+
+
     </div>
 
     <!-- Department input field -->
     <div class="mb-4">
-        <label class="block mb-2">Department</label>
-        <input class="w-full p-2 border" type="text" th:field="*{clientDepartment}" required>
+        <label for="department" class="block mb-2 font-semibold">Department</label>
+        <input id="department" class="w-full p-2 border rounded" type="text" th:field="*{clientDepartment}" required>
     </div>
 
     <!-- Form buttons -->
-    <button type="submit" class="bg-blue-500 text-white p-2 rounded">Create Ticket</button>
-    <a href="/tickets" class="ml-2 text-blue-500">Cancel</a>
+    <div class="flex items-center mt-4">
+        <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+            Create Ticket
+        </button>
+        <a href="/tickets" class="ml-4 text-blue-500 hover:underline">Cancel</a>
+    </div>
 </form>
 </body>
 </html>

@@ -8,12 +8,16 @@ public enum PriorityValue {
 
     private final int displayPriority;
 
-    private PriorityValue(int value){
-        this.displayPriority=value;
+    private PriorityValue(int value) {
+        this.displayPriority = value;
     }
 
-    public int getPriority(){
+    public int getPriority() {
         return displayPriority;
     }
-}
 
+    @Override
+    public String toString() {
+        return this.name(); // Returns "HIGH", "MEDIUM", "LOW"
+    }
+}
