@@ -31,7 +31,9 @@ public class SecurityConfig {
                     auth.requestMatchers("/", "/login", "/error").permitAll();
                     auth.anyRequest().authenticated();
                 })
-                .oauth2Login(form -> form.defaultSuccessUrl("/tickets/create", true))
+                .oauth2Login(form -> form
+                        .loginPage("/")
+                        .defaultSuccessUrl("/tickets/create", true))
                 .logout(logout -> logout.logoutSuccessUrl("/"))
                 .build();
     }
