@@ -34,7 +34,9 @@ public class SecurityConfig {
                 .oauth2Login(form -> form
                         .loginPage("/")
                         .defaultSuccessUrl("/tickets/create", true))
-                .logout(logout -> logout.logoutSuccessUrl("/"))
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/")
+                )
                 .build();
     }
 
