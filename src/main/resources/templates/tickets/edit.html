@@ -1,10 +1,64 @@
 <!DOCTYPE html>
-<html land="en" xmlns:th="https://www.thymeleaf.org/">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Edit Ticket</title>
-</head>
-<body>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head}"></head>
+<body class="p-8">
+<h1 class="text-xl mb-4">Edit Ticket</h1>
 
+<form method="POST" th:action="@{/tickets/edit/{id}(id=${ticket.ticketId})}" th:object="${ticket}" class="max-w-lg">
+    <table class="w-full border">
+        <tr>
+            <th class="p-2">Name</th>
+            <td class="p-2">
+                <input class="w-full p-2 border rounded" type="text" th:field="*{name}" required>
+            </td>
+        </tr>
+        <tr>
+            <th class="p-2">Email</th>
+            <td class="p-2">
+                <input class="w-full p-2 border rounded" type="email" th:field="*{email}" required>
+            </td>
+        </tr>
+        <tr>
+            <th class="p-2">Details</th>
+            <td class="p-2">
+                <textarea class="w-full p-2 border rounded" th:field="*{details}" required></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th class="p-2">Priority</th>
+            <td class="p-2">
+                <select class="w-full p-2 border rounded" th:field="*{priority}" required>
+                    <option th:each="priority : ${priorityValues}"
+                            th:value="${priority.name()}"
+                            th:text="${priority}">
+                    </option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th class="p-2">Status</th>
+            <td class="p-2">
+                <select class="w-full p-2 border rounded" th:field="*{status}" required>
+                    <option th:each="status : ${statusValues}"
+                            th:value="${status.name()}"
+                            th:text="${status}">
+                    </option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th class="p-2">Department</th>
+            <td class="p-2">
+                <input class="w-full p-2 border rounded" type="text" th:field="*{clientDepartment}" required>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Buttons -->
+    <div class="mt-4">
+        <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 inline-block">Update Ticket</button>
+        <a href="/tickets" class="bg-gray-500 text-white p-2 rounded hover:bg-gray-600 ml-2 inline-block">Cancel</a>
+    </div>
+</form>
 </body>
 </html>
