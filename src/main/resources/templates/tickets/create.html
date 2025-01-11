@@ -4,6 +4,20 @@
 <body class="p-8">
 <h1 class="text-xl mb-4">Create New Ticket</h1>
 
+<!--/*
+  p-2 = padding
+  w-full = width
+  mb-4 = margin bottom
+  th:text = binds text
+  th:value = binds value
+  th:field = binds ticket properties to form fields
+  th:action = form action
+  th:class = add class
+  th:attr = add attribute
+  th:each = loop
+  th:replace = replace
+*/-->
+
 <!-- Form with max width and POST method -->
 <form method="POST" th:action="@{/tickets/create}" th:object="${ticket}" class="max-w-lg">
     <!-- Error message display -->
