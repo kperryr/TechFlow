@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: head}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments :: head">
+    <title>Edit Ticket</title>
+</head>
 <body class="p-8">
 <h1 class="text-xl mb-4">Edit Ticket</h1>
 
@@ -18,60 +20,57 @@
   th:replace = replace
 */-->
 
-<!-- If any errors, display a message -->
-<!-- Using a div, since the message is not a form field -->
-<div th:if="${errorMessage}" class="bg-red-100 border border-red-500 text-red-700 p-3 rounded mb-4">
-    <span th:text="${errorMessage}"></span>
-</div>
-
+<!-- Form is using max width -->
 <form method="POST" th:action="@{/tickets/edit/{id}(id=${ticket.ticketId})}" th:object="${ticket}" class="max-w-lg">
+    <!-- If theres an error, display message -->
+    <div th:if="${errorMessage}" class="bg-red-100 border border-red-500 text-red-700 p-3 rounded mb-4"
+         th:text="${errorMessage}"></div>
 
-<form method="POST" th:action="@{/tickets/edit/{id}(id=${ticket.ticketId})}" th:object="${ticket}" class="max-w-lg">
     <table class="w-full border">
         <tr>
-            <th class="p-2">Name</th>
+            <th class="p-2"><label for="name">Name</label></th>
             <td class="p-2">
-                <input class="w-full p-2 border rounded" type="text" th:field="*{name}" required>
+                <input id="name" class="w-full p-2 border rounded" type="text" th:field="*{name}" required>
             </td>
         </tr>
         <tr>
-            <th class="p-2">Email</th>
+            <th class="p-2"><label for="email">Email</label></th>
             <td class="p-2">
-                <input class="w-full p-2 border rounded" type="email" th:field="*{email}" required>
+                <input id="email" class="w-full p-2 border rounded" type="email" th:field="*{email}" required>
             </td>
         </tr>
         <tr>
-            <th class="p-2">Details</th>
+            <th class="p-2"><label for="details">Details</label></th>
             <td class="p-2">
-                <textarea class="w-full p-2 border rounded" th:field="*{details}" required></textarea>
+                <textarea id="details" class="w-full p-2 border rounded" th:field="*{details}" required></textarea>
             </td>
         </tr>
         <tr>
-            <th class="p-2">Priority</th>
+            <th class="p-2"><label for="priority">Priority</label></th>
             <td class="p-2">
-                <select class="w-full p-2 border rounded" th:field="*{priority}" required>
-                    <option th:each="priority : ${priorityValues}"
-                            th:value="${priority.name()}"
-                            th:text="${priority}">
+                <select id="priority" class="w-full p-2 border rounded" th:field="*{priority}" required>
+                    <option th:each="priorityOpt : ${priorityValues}"
+                            th:value="${priorityOpt}"
+                            th:text="${priorityOpt}">
                     </option>
                 </select>
             </td>
         </tr>
         <tr>
-            <th class="p-2">Status</th>
+            <th class="p-2"><label for="status">Status</label></th>
             <td class="p-2">
-                <select class="w-full p-2 border rounded" th:field="*{status}" required>
-                    <option th:each="status : ${statusValues}"
-                            th:value="${status.name()}"
-                            th:text="${status}">
+                <select id="status" class="w-full p-2 border rounded" th:field="*{status}" required>
+                    <option th:each="statusOpt : ${statusValues}"
+                            th:value="${statusOpt}"
+                            th:text="${statusOpt}">
                     </option>
                 </select>
             </td>
         </tr>
         <tr>
-            <th class="p-2">Department</th>
+            <th class="p-2"><label for="department">Department</label></th>
             <td class="p-2">
-                <input class="w-full p-2 border rounded" type="text" th:field="*{clientDepartment}" required>
+                <input id="department" class="w-full p-2 border rounded" type="text" th:field="*{clientDepartment}" required>
             </td>
         </tr>
     </table>

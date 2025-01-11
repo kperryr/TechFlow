@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: head}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments :: head">
+    <title>Create Ticket</title>
+</head>
 <body class="p-8">
 <h1 class="text-xl mb-4">Create New Ticket</h1>
 
@@ -18,47 +20,46 @@
   th:replace = replace
 */-->
 
-<form method="POST" th:action="@{/tickets/create}" th:object="${ticket}" class="max-w-lg">
+<form th:action="@{/tickets/create}" th:object="${ticket}" method="POST" class="max-w-lg">
     <!-- Error message display -->
     <div th:if="${errorMessage}" class="bg-red-100 border border-red-500 text-red-700 p-3 rounded mb-4">
-        <span th:text="${errorMessage}"></span>
+        <span th:text="${errorMessage}">Error message goes here</span>
     </div>
 
     <table class="w-full border">
         <tr>
-            <th class="p-2">Name</th>
+            <th class="p-2"><label for="name">Name</label></th>
             <td class="p-2">
-                <input class="w-full p-2 border rounded" type="text" th:field="*{name}" required>
+                <input id="name" class="w-full p-2 border rounded" type="text" th:field="*{name}" required>
             </td>
         </tr>
         <tr>
-            <th class="p-2">Email</th>
+            <th class="p-2"><label for="email">Email</label></th>
             <td class="p-2">
-                <input class="w-full p-2 border rounded" type="email" th:field="*{email}" required>
+                <input id="email" class="w-full p-2 border rounded" type="email" th:field="*{email}" required>
             </td>
         </tr>
         <tr>
-            <th class="p-2">Details</th>
+            <th class="p-2"><label for="details">Details</label></th>
             <td class="p-2">
-                <textarea class="w-full p-2 border rounded" th:field="*{details}" required></textarea>
+                <textarea id="details" class="w-full p-2 border rounded" th:field="*{details}" required></textarea>
             </td>
         </tr>
         <tr>
-            <th class="p-2">Priority</th>
+            <th class="p-2"><label for="priority">Priority</label></th>
             <td class="p-2">
-                <select class="w-full p-2 border rounded" th:field="*{priority}" required>
-                    <option th:each="priority : ${priorityValues}"
-                            th:value="${priority.name()}"
-                            th:text="${priority}"
-                            th:attr="selected=${priority.name() == ticket.priority?.name()}">
+                <select id="priority" class="w-full p-2 border rounded" th:field="*{priority}" required>
+                    <option th:each="priorityOpt : ${priorityValues}"
+                            th:value="${priorityOpt}"
+                            th:text="${priorityOpt}">
                     </option>
                 </select>
             </td>
         </tr>
         <tr>
-            <th class="p-2">Department</th>
+            <th class="p-2"><label for="department">Department</label></th>
             <td class="p-2">
-                <input class="w-full p-2 border rounded" type="text" th:field="*{clientDepartment}" required>
+                <input id="department" class="w-full p-2 border rounded" type="text" th:field="*{clientDepartment}" required>
             </td>
         </tr>
     </table>
