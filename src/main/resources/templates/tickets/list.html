@@ -4,6 +4,20 @@
 <body class="p-8">
 <h1 class="text-xl mb-4">Support Tickets</h1>
 
+<!--/*
+  p-2 = padding
+  w-full = width
+  mb-4 = margin bottom
+  th:text = binds text
+  th:value = binds value
+  th:field = binds ticket properties to form fields
+  th:action = form action
+  th:class = add class
+  th:attr = add attribute
+  th:each = loop
+  th:replace = replace
+*/-->
+
 <!-- Link to create new ticket -->
 <a href="/tickets/create" class="bg-blue-500 text-white p-2 rounded mb-4 inline-block">
     Create New Ticket
@@ -35,6 +49,23 @@
         <td class="p-2" th:text="${ticket.priority}"></td>
         <td class="p-2" th:text="${ticket.status}"></td>
         <td class="p-2" th:text="${ticket.getDateString(ticket.dateSubmitted)}"></td>
+        <td class="p-2">
+            <!-- Link to edit ticket -->
+        <a th:href="@{/tickets/edit/{id}(id=${ticket.ticketId})}"
+           class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 mr-2">
+            Edit/Update Ticket
+        </a>
+            <!-- Link to delete ticket -->
+            <form th:action="@{/tickets/delete/{id}(id=${ticket.ticketId})}"
+                  method="POST"
+                  class="inline"
+                  onsubmit="return confirm('Are you sure you want to delete this ticket?');">
+                <button type="submit"
+                        class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                    Delete Ticket
+                </button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>
