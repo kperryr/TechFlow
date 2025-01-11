@@ -128,4 +128,8 @@ public class TicketService {
                         throw new TicketNotFoundException("Ticket not found with ID: " + ticketId);
                 }
         }
+
+        public Ticket findTicketById(Integer ticketId) {
+                return ticketRepository.findById(ticketId).orElse(null);
+        }
 }
