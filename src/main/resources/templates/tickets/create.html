@@ -18,58 +18,55 @@
   th:replace = replace
 */-->
 
-<!-- Form with max width and POST method -->
 <form method="POST" th:action="@{/tickets/create}" th:object="${ticket}" class="max-w-lg">
     <!-- Error message display -->
     <div th:if="${errorMessage}" class="bg-red-100 border border-red-500 text-red-700 p-3 rounded mb-4">
         <span th:text="${errorMessage}"></span>
     </div>
 
-    <!-- Name input field -->
-    <div class="mb-4">
-        <label for="name" class="block mb-2 font-semibold">Name</label>
-        <input id="name" class="w-full p-2 border rounded" type="text" th:field="*{name}" required>
-    </div>
+    <table class="w-full border">
+        <tr>
+            <th class="p-2">Name</th>
+            <td class="p-2">
+                <input class="w-full p-2 border rounded" type="text" th:field="*{name}" required>
+            </td>
+        </tr>
+        <tr>
+            <th class="p-2">Email</th>
+            <td class="p-2">
+                <input class="w-full p-2 border rounded" type="email" th:field="*{email}" required>
+            </td>
+        </tr>
+        <tr>
+            <th class="p-2">Details</th>
+            <td class="p-2">
+                <textarea class="w-full p-2 border rounded" th:field="*{details}" required></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th class="p-2">Priority</th>
+            <td class="p-2">
+                <select class="w-full p-2 border rounded" th:field="*{priority}" required>
+                    <option th:each="priority : ${priorityValues}"
+                            th:value="${priority.name()}"
+                            th:text="${priority}"
+                            th:attr="selected=${priority.name() == ticket.priority?.name()}">
+                    </option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th class="p-2">Department</th>
+            <td class="p-2">
+                <input class="w-full p-2 border rounded" type="text" th:field="*{clientDepartment}" required>
+            </td>
+        </tr>
+    </table>
 
-    <!-- Email input field -->
-    <div class="mb-4">
-        <label for="email" class="block mb-2 font-semibold">Email</label>
-        <input id="email" class="w-full p-2 border rounded" type="email" th:field="*{email}" required>
-    </div>
-
-    <!-- Details textarea -->
-    <div class="mb-4">
-        <label for="details" class="block mb-2 font-semibold">Details</label>
-        <textarea id="details" class="w-full p-2 border rounded" th:field="*{details}" required></textarea>
-    </div>
-
-    <!-- Priority selection dropdown -->
-    <div class="mb-4">
-        <label for="priority" class="block mb-2 font-semibold">Priority</label>
-        <select id="priority" class="w-full p-2 border rounded" th:field="*{priority}" required>
-            <option th:each="priority : ${priorityValues}"
-                    th:value="${priority.name()}"
-                    th:text="${priority}"
-                    th:attr="selected=${priority.name() == ticket.priority?.name()}">
-            </option>
-        </select>
-
-
-
-    </div>
-
-    <!-- Department input field -->
-    <div class="mb-4">
-        <label for="department" class="block mb-2 font-semibold">Department</label>
-        <input id="department" class="w-full p-2 border rounded" type="text" th:field="*{clientDepartment}" required>
-    </div>
-
-    <!-- Form buttons -->
-    <div class="flex items-center mt-4">
-        <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
-            Create Ticket
-        </button>
-        <a href="/tickets" class="ml-4 text-blue-500 hover:underline">Cancel</a>
+    <!-- Buttons -->
+    <div class="mt-4">
+        <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 inline-block">Create Ticket</button>
+        <a href="/tickets" class="bg-gray-500 text-white p-2 rounded hover:bg-gray-600 ml-2 inline-block">Cancel</a>
     </div>
 </form>
 </body>

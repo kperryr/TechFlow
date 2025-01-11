@@ -18,6 +18,17 @@
   th:replace = replace
 */-->
 
+<!--/*
+  Action Button Comments:
+  th:href = creates dynamic URL with ticket ID
+  th:action = creates form action URL with ticket ID
+  onsubmit = JavaScript confirmation before delete
+  class="inline" = keeps delete button on same line as edit
+  px-3 = horizontal padding
+  py-1 = vertical padding
+  mr-2 = right margin spacing
+*/-->
+
 <!-- Link to create new ticket -->
 <a href="/tickets/create" class="bg-blue-500 text-white p-2 rounded mb-4 inline-block">
     Create New Ticket
@@ -36,6 +47,7 @@
         <th class="p-2">Priority</th>
         <th class="p-2">Status</th>
         <th class="p-2">Date Submitted</th>
+        <th class="p-2">Actions</th> <!-- Added Actions column header -->
     </tr>
     </thead>
     <tbody>
@@ -50,12 +62,12 @@
         <td class="p-2" th:text="${ticket.status}"></td>
         <td class="p-2" th:text="${ticket.getDateString(ticket.dateSubmitted)}"></td>
         <td class="p-2">
-            <!-- Link to edit ticket -->
-        <a th:href="@{/tickets/edit/{id}(id=${ticket.ticketId})}"
-           class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 mr-2">
-            Edit/Update Ticket
-        </a>
-            <!-- Link to delete ticket -->
+            <!-- Link to edit ticket - uses GET request -->
+            <a th:href="@{/tickets/edit/{id}(id=${ticket.ticketId})}"
+               class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 mr-2">
+                Edit/Update Ticket
+            </a>
+            <!-- Form for delete ticket - uses POST request for security -->
             <form th:action="@{/tickets/delete/{id}(id=${ticket.ticketId})}"
                   method="POST"
                   class="inline"

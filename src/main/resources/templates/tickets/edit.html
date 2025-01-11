@@ -18,6 +18,14 @@
   th:replace = replace
 */-->
 
+<!-- If any errors, display a message -->
+<!-- Using a div, since the message is not a form field -->
+<div th:if="${errorMessage}" class="bg-red-100 border border-red-500 text-red-700 p-3 rounded mb-4">
+    <span th:text="${errorMessage}"></span>
+</div>
+
+<form method="POST" th:action="@{/tickets/edit/{id}(id=${ticket.ticketId})}" th:object="${ticket}" class="max-w-lg">
+
 <form method="POST" th:action="@{/tickets/edit/{id}(id=${ticket.ticketId})}" th:object="${ticket}" class="max-w-lg">
     <table class="w-full border">
         <tr>
