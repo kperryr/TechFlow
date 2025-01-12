@@ -29,9 +29,14 @@ public class TicketService {
         }
 
         // Read all tickets
+        // Update - Modified to get tickets that are NOT closed.
         public List<Ticket> getAllTickets() { // returns a list type of all tickets called "getAllTickets"
                 List<Ticket> tickets = new ArrayList<>(); // creating an empty list to store the tickets
-                ticketRepository.findAll().forEach(tickets::add); // Iterates over repo/database, returns all tickets and adds them to the list
+                ticketRepository.findAll().forEach(ticket -> { // Iterates over repo/database, returns all tickets and adds them to the list
+                        if (ticket.getStatus() != StatusUpdates.CLOSED) {  // Only add non-closed tickets
+                                tickets.add(ticket);
+                        }
+                });
                 return tickets;
         }
 
