@@ -2,22 +2,7 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org/">
 <head th:replace="fragments.html :: head"></head>
 <body class="bg-gray-200 font-sans">
-<header class="bg-white p-6 flex items-center justify-between">
-    <div class="flex items-center space-x-6">
-        <h1 class="text-4xl font-bold">TechFlow</h1>
-        <div class="text-black font-bold">
-            <p>Current User: <span th:text="${name}"></span></p>
-        </div>
-    </div>
-
-    <nav class="nav-links">
-        <ul class="flex justify-end space-x-6 text-black">
-            <li><a href="/" class="hover:text-green-400">Home</a></li>
-            <li><a href="/manage-account" class="hover:text-green-400">Manage Account</a></li>
-            <li><a href="/logout" class="hover:text-green-400">Logout</a></li>
-        </ul>
-    </nav>
-</header>
+<header th:replace="fragments.html :: header"></header>
 
 <main class="m-auto my-20 max-w-lg p-10 bg-white rounded-lg shadow-md">
     <h1 class="text-2xl font-bold mb-6">Manage Your Account</h1>
@@ -36,6 +21,9 @@
     <form th:action="@{/manage-account/upload-profile-picture}" method="post" enctype="multipart/form-data" class="mb-8">
         <div class="mb-4">
             <label for="profilePicture" class="block text-gray-700 font-medium">Profile Picture</label>
+            <div>
+                <img th:src="${profilePicturePath}" alt="Profile Picture" class="w-16 h-16 rounded-full border border-gray-300 object-cover">
+            </div>
             <input type="file" id="profilePicture" name="profilePicture"
                    class="mt-2 w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400">
         </div>

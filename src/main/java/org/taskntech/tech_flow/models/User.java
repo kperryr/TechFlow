@@ -14,6 +14,7 @@ public class User {
 
     private String email;
     private String displayName;
+    private String profilePicturePath;
 
     public User() {
     }
@@ -45,5 +46,13 @@ public class User {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getProfilePicturePath() {
+        return profilePicturePath;
+    }
+
+    public void setProfilePicturePath(String profilePicturePath) {
+        this.profilePicturePath = profilePicturePath;
     }
 }

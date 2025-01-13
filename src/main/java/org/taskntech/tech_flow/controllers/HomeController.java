@@ -42,6 +42,7 @@ public class HomeController {
             model.addAttribute("name", user.getDisplayName());
             model.addAttribute("username", username);
             model.addAttribute("email", email);
+            model.addAttribute("profilePicturePath", user.getProfilePicturePath());
             model.addAttribute("all", all);
         } else {
             model.addAttribute("authenticated", false);
