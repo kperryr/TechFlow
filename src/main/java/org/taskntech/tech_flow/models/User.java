@@ -14,7 +14,6 @@ public class User {
 
     private String email;
     private String displayName;
-    private String profilePicturePath;
 
     public User() {
     }
@@ -22,7 +21,6 @@ public class User {
     public User(String email, String displayName){
         this.email = email;
         this.displayName = displayName;
-        this.profilePicturePath = "https://www.tenforums.com/attachments/user-accounts-family-safety/322690d1615743307-user-account-image-log-user.png";
     }
 
     public int getUserId() {
@@ -47,15 +45,5 @@ public class User {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
-    }
-
-    public String getProfilePicturePath() {
-        return profilePicturePath != null && !profilePicturePath.isEmpty()
-                ? profilePicturePath
-                : "https://www.tenforums.com/attachments/user-accounts-family-safety/322690d1615743307-user-account-image-log-user.png";
-    }
-
-    public void setProfilePicturePath(String profilePicturePath) {
-        this.profilePicturePath = profilePicturePath;
     }
 }

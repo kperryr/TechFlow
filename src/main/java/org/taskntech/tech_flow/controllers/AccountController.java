@@ -7,7 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 @Controller
@@ -40,4 +45,32 @@ public class AccountController {
 
         return "redirect:/manage-account?success=true";
     }
+
+    private static final String UPLOAD_DIRECTORY = "uploads/";
+
+    @PostMapping("/manage-account/upload-profile-picture")
+    public String uploadProfilePicture(@RequestParam("profilePicture") MultipartFile file,
+                                       @AuthenticationPrincipal OAuth2User principal) {
+        if (file.isEmpty()) {
+            return "redirect:/manage-account?error=NoFileUploaded";
+        }
+
+        try {
+            String username = principal.getAttribute("login");
+            if (username == null || username.isEmpty()) {
+                username = principal.getAttribute("email");
+            }
+
+            String fileName = username + ".profile-image";
+            Path uploadPath = Paths.get(UPLOAD_DIRECTORY, fileName);
+            Files.createDirectories(uploadPath.getParent());
+            Files.write(uploadPath, file.getBytes());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "redirect:/manage-account?error=FileUploadFailed";
+        }
+        return "redirect:/manage-account?profilePictureUploaded=true";
+    }
+
 }
