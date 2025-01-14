@@ -56,7 +56,7 @@ public class TicketService {
         // Update ticket status
         // Using optional<> since it returns null or the ticket
         public Ticket updateTicketStatus(Integer ticketId, StatusUpdates newStatus) {
-                // Fetch the ticket by its Id
+                // Fetch the ticket by its ticketId
                 Optional<Ticket> retrievedTicket = ticketRepository.findById(ticketId);
 
                 // Check if the ticket exists
