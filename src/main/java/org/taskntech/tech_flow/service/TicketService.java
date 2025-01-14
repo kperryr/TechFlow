@@ -137,4 +137,39 @@ public class TicketService {
         public Ticket findTicketById(Integer ticketId) {
                 return ticketRepository.findById(ticketId).orElse(null);
         }
+
+        // This method is used when a user wants to change the status of a ticket.
+        // It returns a boolean that handles all StatusUpdate ENUMS (not_started, in_progress, delayed, etc.) and checks if they are valid
+        private boolean isValidStatusTransition(StatusUpdates currentStatus, StatusUpdates newStatus) {
+
+                // Adding a method to check if the status transition is valid
+                // This method takes the current and desired new status as parameters
+                switch (currentStatus) { // Evaluates the current ticket status
+                        case NOT_STARTED: // If the current status is NOT_STARTED
+                                // Only allows transition to IN_PROGRESS
+                                return newStatus == StatusUpdates.IN_PROGRESS; // This updates the status to IN_PROGRESS
+
+                        // Only 2 possible transitions from IN_PROGRESS. Either its DELAYED, or RESOLVED
+                        case IN_PROGRESS:
+                                return newStatus == StatusUpdates.DELAYED ||
+                                        newStatus == StatusUpdates.RESOLVED; // OPTIONS: Moves ticket to DELAYED or RESOLVED
+
+                        // Only 2 possible transitions from DELAYED. Either its IN_PROGRESS, or RESOLVED
+                        case DELAYED:
+                                return newStatus == StatusUpdates.IN_PROGRESS ||
+                                        newStatus == StatusUpdates.RESOLVED; // OPTIONS: Moves ticket to IN_PROGRESS or RESOLVED
+
+                        // Added StatusUpdates.RESOLVED because ticket may need to be re-opened by user
+                        case RESOLVED:
+                                return newStatus == StatusUpdates.CLOSED ||
+                                        newStatus == StatusUpdates.IN_PROGRESS; // OPTIONS: Moves ticket to CLOSED or back to IN_PROGRESS
+
+                        // Only 1 possible transition from CLOSED.
+                        case CLOSED:
+                                return false; // Ticket is closed and cant be re-opened.
+                }
+
+                return false; // IntelliJ forced me to add. I assumed for any unexpected cases, return false.
+
+        }
 }
