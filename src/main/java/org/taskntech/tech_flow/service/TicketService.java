@@ -153,7 +153,7 @@ public class TicketService {
 
         // This method is used when a user wants to change the status of a ticket.
         // It returns a boolean that handles all StatusUpdate ENUMS (not_started, in_progress, delayed, etc.) and checks if they are valid
-        private boolean isValidStatusTransition(StatusUpdates currentStatus, StatusUpdates newStatus) {
+        public boolean isValidStatusTransition(StatusUpdates currentStatus, StatusUpdates newStatus) {
 
                 // Adding a method to check if the status transition is valid
                 // This method takes the current and desired new status as parameters
