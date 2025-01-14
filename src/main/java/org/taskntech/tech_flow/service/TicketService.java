@@ -1,5 +1,6 @@
 package org.taskntech.tech_flow.service;
 
+import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.taskntech.tech_flow.data.TicketRepository;
@@ -8,6 +9,7 @@ import org.taskntech.tech_flow.models.StatusUpdates;
 import org.taskntech.tech_flow.models.Ticket;
 
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -56,18 +58,29 @@ public class TicketService {
         // Update ticket status
         // Using optional<> since it returns null or the ticket
         public Ticket updateTicketStatus(Integer ticketId, StatusUpdates newStatus) {
-                // Fetch the ticket by its ticketId
+                // Fetch the ticket by its Id
                 Optional<Ticket> retrievedTicket = ticketRepository.findById(ticketId);
 
                 // Check if the ticket exists
                 if (retrievedTicket.isPresent()) {
                         Ticket ticket = retrievedTicket.get();
+
+                        // Validate status transition
+                        if (!isValidStatusTransition(ticket.getStatus(), newStatus)) {
+                                throw new ValidationException("Invalid status transition from " +
+                                        ticket.getStatus() + " to " + newStatus);
+                        }
+
+                        // Store the previous status before updating
+                        ticket.setPreviousStatus(ticket.getStatus());
+
                         // Update the status
                         ticket.setStatus(newStatus);
+                        ticket.setStatusLastUpdated(LocalDateTime.now());
                         ticket.setLastEdited();
+
                         return ticketRepository.save(ticket);
                 } else {
-                        // Created a custom exception folder to handle all exceptions
                         throw new TicketNotFoundException("Ticket not found with ID: " + ticketId);
                 }
         }
