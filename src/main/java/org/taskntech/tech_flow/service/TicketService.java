@@ -58,12 +58,12 @@ public class TicketService {
         // Update ticket status
         // Using optional<> since it returns null or the ticket
         public Ticket updateTicketStatus(Integer ticketId, StatusUpdates newStatus) {
-                // Fetch the ticket by its Id
+                // Fetch the ticket by its ticketId
                 Optional<Ticket> retrievedTicket = ticketRepository.findById(ticketId);
 
                 // Check if the ticket exists
                 if (retrievedTicket.isPresent()) {
-                        Ticket ticket = retrievedTicket.get();
+                        Ticket ticket = retrievedTicket.get(); // assign the ticket object to the variable ticket
 
                         // Validate status transition
                         if (!isValidStatusTransition(ticket.getStatus(), newStatus)) {
@@ -181,7 +181,6 @@ public class TicketService {
                         case CLOSED:
                                 return false; // Ticket is closed and cant be re-opened.
                 }
-
                 return false; // IntelliJ forced me to add. I assumed for any unexpected cases, return false.
 
         }
