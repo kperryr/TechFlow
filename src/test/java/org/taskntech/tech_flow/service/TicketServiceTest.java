@@ -45,5 +45,36 @@ public class TicketServiceTest {
                 assertEquals(StatusUpdates.IN_PROGRESS, updatedTicket.getStatus());
         }
 
+        @Test
+        void invalidStatusTransition_NotStartedToClosed_ShouldThrowException() {
+                testTicket.setStatus(StatusUpdates.NOT_STARTED);
+                when(ticketRepository.findById(1)).thenReturn(Optional.of(testTicket));
+
+                assertThrows(ValidationException.class, () -> {
+                        ticketService.updateTicketStatus(1, StatusUpdates.CLOSED);
+                });
+        }
+
+        @Test
+        void statusTransition_ShouldUpdateLastEditedAndStatusLastUpdated() {
+                testTicket.setStatus(StatusUpdates.NOT_STARTED);
+                when(ticketRepository.findById(1)).thenReturn(Optional.of(testTicket));
+                when(ticketRepository.save(any(Ticket.class))).thenReturn(testTicket);
+
+                Ticket updatedTicket = ticketService.updateTicketStatus(1, StatusUpdates.IN_PROGRESS);
+
+                assertNotNull(updatedTicket.getLastEdited());
+                assertNotNull(updatedTicket.getStatusLastUpdated());
+                assertEquals(StatusUpdates.NOT_STARTED, updatedTicket.getPreviousStatus());
+        }
+
+        @Test
+        void validStatusTransitions_ShouldFollowCorrectFlow() {
+                assertTrue(ticketService.isValidStatusTransition(StatusUpdates.NOT_STARTED, StatusUpdates.IN_PROGRESS));
+                assertTrue(ticketService.isValidStatusTransition(StatusUpdates.IN_PROGRESS, StatusUpdates.DELAYED));
+                assertTrue(ticketService.isValidStatusTransition(StatusUpdates.IN_PROGRESS, StatusUpdates.RESOLVED));
+                assertTrue(ticketService.isValidStatusTransition(StatusUpdates.RESOLVED, StatusUpdates.CLOSED));
+                assertFalse(ticketService.isValidStatusTransition(StatusUpdates.CLOSED, StatusUpdates.IN_PROGRESS));
+        }
 
 }
