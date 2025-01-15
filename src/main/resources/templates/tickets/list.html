@@ -41,16 +41,17 @@
 <table class="w-full border">
     <thead>
     <!-- Header row with light gray background -->
+    <!-- UPDATE: Fixed column width to maintain consistent appearance -->
     <tr class="bg-gray-100">
-        <th class="p-2">ID</th>
-        <th class="p-2">Name</th>
-        <th class="p-2">Email</th>
-        <th class="p-2">Department</th>
-        <th class="p-2">Details</th>
-        <th class="p-2">Priority</th>
-        <th class="p-2">Status</th>
-        <th class="p-2">Date Submitted</th>
-        <th class="p-2">Actions</th>
+        <th class="p-2 w-12 text-left">ID</th>
+        <th class="p-2 w-32 text-left">Name</th>
+        <th class="p-2 w-40 text-left">Email</th>
+        <th class="p-2 w-12 text-left">Department</th>
+        <th class="p-2 w-96 text-left">Details</th>
+        <th class="p-2 w-24 text-left">Priority</th>
+        <th class="p-2 w-28 text-left">Status</th>
+        <th class="p-2 w-32 text-left">Date Submitted</th>
+        <th class="p-2 w-32 text-left">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -62,6 +63,9 @@
         <td class="p-2" th:text="${ticket.clientDepartment}">Department</td>
         <td class="p-2" th:text="${ticket.details}">Details</td>
         <td class="p-2" th:text="${ticket.priority}">Priority</td>
+
+
+        <!-- Handles STATUS Color and Text -->
         <td class="p-2">
             <!-- UPDATE: Added COLORS based on ticket status -->
             <!-- This uses TERNARY OPERATOR to select the status and color -->

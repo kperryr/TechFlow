@@ -31,13 +31,10 @@ public class TicketService {
         }
 
         // Read all tickets
-        // Update - Modified to get tickets that are NOT closed.
         public List<Ticket> getAllTickets() { // returns a list type of all tickets called "getAllTickets"
                 List<Ticket> tickets = new ArrayList<>(); // creating an empty list to store the tickets
                 ticketRepository.findAll().forEach(ticket -> { // Iterates over repo/database, returns all tickets and adds them to the list
-                        if (ticket.getStatus() != StatusUpdates.CLOSED) {  // Only add non-closed tickets
-                                tickets.add(ticket);
-                        }
+                        tickets.add(ticket);
                 });
                 return tickets;
         }
@@ -67,7 +64,7 @@ public class TicketService {
 
                         // Validate status transition
                         if (!isValidStatusTransition(ticket.getStatus(), newStatus)) {
-                                throw new ValidationException("Invalid status transition from " +
+                                throw new ValidationException(" Opps, invalid status transition from " +
                                         ticket.getStatus() + " to " + newStatus);
                         }
 
