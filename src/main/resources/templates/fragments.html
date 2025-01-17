@@ -1,15 +1,31 @@
-<!DOCTYPE html >
+<!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org/">
 
 <head th:fragment="head">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- tailwind stylesheets and script -->
     <script src="https://cdn.tailwindcss.com"></script>
-
     <title>TechFlow</title>
 </head>
-<body>
 
+<body>
+<header th:fragment="header" class="bg-white p-6 flex items-center justify-between">
+    <div class="flex items-center space-x-6">
+        <h1 class="text-4xl font-bold">TechFlow</h1>
+        <div class="text-black font-bold">
+            <p>Current User: <span th:text="${name}"></span></p>
+        </div>
+    </div>
+
+    <nav class="flex items-center space-x-6">
+        <ul class="flex justify-end space-x-6 text-black">
+            <li><a href="/" class="hover:text-green-400">Home</a></li>
+            <li><a href="/manage-account" class="hover:text-green-400">Manage Account</a></li>
+            <li><a href="/logout" class="hover:text-green-400">Logout</a></li>
+        </ul>
+        <img th:src="${profilePicturePath}" alt="Profile Picture"
+             class="w-10 h-10 rounded-full border border-gray-300 object-cover">
+    </nav>
+</header>
 </body>
+
 </html>
