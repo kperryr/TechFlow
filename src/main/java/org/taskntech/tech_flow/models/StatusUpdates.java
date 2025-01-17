@@ -1,24 +1,25 @@
 package org.taskntech.tech_flow.models;
 
 public enum StatusUpdates {
+    NOT_STARTED("Not Started"),
+    IN_PROGRESS("In Progress"),
+    DELAYED("Delayed"),
+    RESOLVED("Resolved"),
+    CLOSED("Closed");
 
-        // Enum for the status updates
-        NOT_STARTED("Not Started"),
-        IN_PROGRESS("In Progress"),
-        DELAYED("Delayed"),
-        RESOLVED("Resolved"),
-        CLOSED("Closed");
+    private final String displayStatus;
 
-        // The string to be displayed
-        private final String displayStatus;
+    private StatusUpdates(String value){
+        this.displayStatus=value;
+    }
 
-        // Constructor for the enum
-        StatusUpdates(String displayStatus) {
-                this.displayStatus = displayStatus;
-        }
+    public String getDisplayStatus(){
+        return displayStatus;
+    }
 
-        // Getter for the display status
-        public String getDisplayStatus() {
-                return displayStatus;
-        }
+    // UPDATE - Added toString method
+    @Override
+    public String toString() {
+        return name();
+    }
 }

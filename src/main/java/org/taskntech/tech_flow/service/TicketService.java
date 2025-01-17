@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.taskntech.tech_flow.data.TicketRepository;
 import org.taskntech.tech_flow.exceptions.TicketNotFoundException;
+import org.taskntech.tech_flow.models.PriorityValue;
 import org.taskntech.tech_flow.models.StatusUpdates;
 import org.taskntech.tech_flow.models.Ticket;
 
@@ -100,7 +101,7 @@ public class TicketService {
         }
 
         // Update ticket priority
-        public Ticket updateTicketPriority(Integer ticketId, int newPriority) {
+        public Ticket updateTicketPriority(Integer ticketId, PriorityValue newPriority) {
                 // Fetch the ticket by its ticketId
                 Optional<Ticket> retrievedTicket = ticketRepository.findById(ticketId);
 

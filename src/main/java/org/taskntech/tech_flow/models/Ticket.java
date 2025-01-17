@@ -1,6 +1,13 @@
 package org.taskntech.tech_flow.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 //import jakarta.validation.constraints.Size;
 //import jakarta.validation.constraints.NotBlank;
 
@@ -10,48 +17,70 @@ import java.time.format.DateTimeFormatter;
 @Entity
 public class Ticket extends AbstractEntity {
 
+    private LocalDateTime statusLastUpdated;  // Timestamp of last status change
+    private StatusUpdates previousStatus;     // Stores the previous status value
+
+    //NO declarative are needed
+    //Going to switch to java.sql.timestamp
+    private LocalDateTime lastEdited;
+
+
     @Id
     @GeneratedValue
     private int ticketId;
 
-    //@NotBlank
-    //@Size(min = 3, max = 30, message = "Name must be between 3 and 30 characters")
+    // UPDATE - Had to increase message details length
+    @NotBlank
+    @Size(min = 3, max = 255, message = "Name must be between 3 and 255 characters")
     private String details;
 
-    //@NotNull(message= "Priority level is required")
-    private int priority;
-
-    // UPDATED - Enum for the ticket status
+    // UPDATE - Changed from int to PriorityValue enum for proper enum handling
+    @NotNull(message = "Priority level is required")
     @Enumerated(EnumType.STRING)
-    private StatusUpdates status = StatusUpdates.NOT_STARTED; // Default status
+    private PriorityValue priority;
+
+
+    //find declarative
+    // UPDATE - Changed from String to StatusUpdates enum for proper enum handling
+    @Enumerated(EnumType.STRING)
+    private StatusUpdates status;
 
     //NO declarative are needed
     //Going to switch to java.sql.timestamp
-    private String dateSubmitted;
+    private LocalDateTime dateSubmitted;
 
-    //@NotBlank
-    //@Size(min = 2, max = 15, message = "Department name must be between 2 and 15 characters" )
+    @NotBlank
+    @Size(min = 2, max = 15, message = "Department name must be between 2 and 15 characters" )
     private String clientDepartment;
 
-    //NO declarative are needed
-    //Going to switch to java.sql.timestamp
-    private String lastEdited;
+
 
     //edit after core features are done
     private String notes;
 
-    public Ticket(String name, String email, String details, int priority, String clientDepartment){
-        super(name,email);
-        this.details= details;
-        this.priority=priority;
-        this.clientDepartment=clientDepartment;
+    // UPDATE - Updated constructor to use PriorityValue enum instead of int
+    public Ticket(String name, String email, String details, PriorityValue priority, String clientDepartment) {
+        super(name, email);
+        this.details = details;
+        this.priority = priority;
+        this.clientDepartment = clientDepartment;
+        this.status = StatusUpdates.NOT_STARTED;  // Initialize status
+        this.previousStatus = null;               // Initialize previousStatus
+        this.statusLastUpdated = LocalDateTime.now(); // Initialize statusLastUpdated
         setDateSubmitted();
     }
 
     // Added a No-argument constructor
+    // UPDATED - to initialize previousStatus and statusLastUpdated
     public Ticket() {
-        super("", ""); // Set default values for abstract entity fields
+        super("", "");
+        this.priority = PriorityValue.LOW;
+        this.status = StatusUpdates.NOT_STARTED;
+        this.previousStatus = null; // Initialize previousStatus to null when creating a new ticket for the first time
+        this.statusLastUpdated = LocalDateTime.now(); // Initialize statusLastUpdated to the current timestamp
+        setDateSubmitted();
     }
+
 
     public String getDetails() {
         return details;
@@ -65,35 +94,46 @@ public class Ticket extends AbstractEntity {
         return ticketId;
     }
 
-    public int getPriority() {
+    // UPDATE - Added a setter for ticketId for updating
+    public void setTicketId(int ticketId) {
+        this.ticketId = ticketId;
+    }
+
+    // UPDATE - Changed to return PriorityValue enum instead of int
+    public PriorityValue getPriority() {
         return priority;
     }
 
-    public void setPriority(int priority) {
+    // UPDATE - Changed to accept PriorityValue enum instead of int
+    public void setPriority(PriorityValue priority) {
         this.priority = priority;
     }
 
-    // UPDATED - Since status is now an enum
+    // UPDATE - Changed to return StatusUpdates enum instead of String
     public StatusUpdates getStatus() {
         return status;
     }
 
-    // UPDATED - Since status is now an enum
+    // UPDATE - Changed to store enum directly instead of string value
     public void setStatus(StatusUpdates status) {
         this.status = status;
-        setLastEdited(); // Update the last edited timestamp when status changes
     }
 
-    public String getDateSubmitted() {
+    public LocalDateTime getDateSubmitted() {
         return dateSubmitted;
     }
 
     private void setDateSubmitted() {
+        this.dateSubmitted = LocalDateTime.now();
+    }
 
-        LocalDateTime dateObj = LocalDateTime.now();
+    // UPDATE - to hande null dates
+    public String getDateString(LocalDateTime date) {
+        if (date == null) { // check if the date is null
+            return "N/A";
+        }
         DateTimeFormatter dateFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        String formattedDate = dateObj.format(dateFormatObj);
-        this.dateSubmitted = formattedDate;
+        return date.format(dateFormatObj);
     }
 
     public String getClientDepartment() {
@@ -104,15 +144,13 @@ public class Ticket extends AbstractEntity {
         this.clientDepartment = clientDepartment;
     }
 
-    public String getLastEdited() {
+    public LocalDateTime getLastEdited() {
         return lastEdited;
     }
 
     public void setLastEdited() {
-        LocalDateTime dateObj = LocalDateTime.now();
-        DateTimeFormatter dateFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        String formattedDate = dateObj.format(dateFormatObj);
-        this.lastEdited= formattedDate;
+
+        this.lastEdited= LocalDateTime.now();
     }
 
     public String getNotes() {
@@ -123,5 +161,21 @@ public class Ticket extends AbstractEntity {
         this.notes = notes;
     }
 
+    public void setStatusLastUpdated(LocalDateTime statusLastUpdated) {
+        this.statusLastUpdated = statusLastUpdated;
+    }
 
+    public void setPreviousStatus(StatusUpdates previousStatus) {
+        this.previousStatus = previousStatus;
+    }
+
+    // UPDATE - added getters for status updates
+    public StatusUpdates getPreviousStatus() {
+        return previousStatus;
+    }
+
+    // UPDATE - added getters for localdatetime
+    public LocalDateTime getStatusLastUpdated() {
+        return statusLastUpdated;
+    }
 }
