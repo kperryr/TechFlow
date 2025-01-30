@@ -1,10 +1,6 @@
 package org.taskntech.tech_flow.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -22,8 +18,9 @@ public class Ticket extends AbstractEntity {
     private LocalDateTime lastEdited;
 
 
+    @SequenceGenerator(name="seq_id_ticket", allocationSize=1)
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.SEQUENCE,generator="seq_id_ticket")
     private int ticketId;
 
     // UPDATE - Had to increase message details length

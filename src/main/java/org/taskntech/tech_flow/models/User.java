@@ -1,27 +1,25 @@
 package org.taskntech.tech_flow.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
-public class User extends AbstractEntity {
+public class User {
+
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int userId;
 
-    //updated to remove display name and email, parent call has name and email
-
+    private String email;
+    private String displayName;
     private String profilePicturePath;
 
     public User() {
-        super("","");// calls to parent class
     }
 
-    public User(String email, String name){
-        super(email,name); //calls to parent class
+    public User(String email, String displayName){
+        this.email = email;
+        this.displayName = displayName;
         this.profilePicturePath = "https://www.tenforums.com/attachments/user-accounts-family-safety/322690d1615743307-user-account-image-log-user.png";
     }
 
@@ -29,12 +27,24 @@ public class User extends AbstractEntity {
         return userId;
     }
 
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getDisplayName() {
-        return this.name; //get parent class value
+        return displayName;
     }
 
     public void setDisplayName(String displayName) {
-        this.name = displayName; //set parent class value
+        this.displayName = displayName;
     }
 
     public String getProfilePicturePath() {
