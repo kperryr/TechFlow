@@ -23,12 +23,15 @@ public class GlobalControllerAccountSettings {
     public void addGlobalAttributes(@AuthenticationPrincipal OAuth2User principal, Model model) {
         if (principal != null) {
             String email = principal.getAttribute("email");
+            String name = principal.getAttribute("name");
             User user = userRepository.findByEmail(email);
 
             if (user != null) {
                 model.addAttribute("name", user.getDisplayName());
                 model.addAttribute("profilePicturePath", user.getProfilePicturePath() != null ? user.getProfilePicturePath() : DEFAULT_PROFILE_PICTURE_URL);
             } else {
+                //creates new instance of a user
+                User newUser = userRepository.save(new User( email, name));
                 model.addAttribute("name", principal.getAttribute("name"));
                 model.addAttribute("profilePicturePath", DEFAULT_PROFILE_PICTURE_URL);
             }

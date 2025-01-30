@@ -14,11 +14,11 @@ public abstract class AbstractEntity {
     //Will be user's name(User) and clients name(ticket)
     @NotBlank
     @Size(min = 3, max = 30, message = "Name must be between 3 and 30 characters")
-    private String name;
+    protected String name;
 
     @NotBlank
     @Size(min = 10, max= 35, message = "Email must be between 10 and 35 characters")
-    private String email;
+    protected String email;
 
     public AbstractEntity(String name, String email){
         this.name=name;

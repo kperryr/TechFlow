@@ -6,22 +6,22 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class User {
+public class User extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
 
-    private String email;
-    private String displayName;
+    //updated to remove display name and email, parent call has name and email
+
     private String profilePicturePath;
 
     public User() {
+        super("","");// calls to parent class
     }
 
-    public User(String email, String displayName){
-        this.email = email;
-        this.displayName = displayName;
+    public User(String email, String name){
+        super(email,name); //calls to parent class
         this.profilePicturePath = "https://www.tenforums.com/attachments/user-accounts-family-safety/322690d1615743307-user-account-image-log-user.png";
     }
 
@@ -29,24 +29,12 @@ public class User {
         return userId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getDisplayName() {
-        return displayName;
+        return this.name; //get parent class value
     }
 
     public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+        this.name = displayName; //set parent class value
     }
 
     public String getProfilePicturePath() {

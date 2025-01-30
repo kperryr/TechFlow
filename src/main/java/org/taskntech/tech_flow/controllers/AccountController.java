@@ -34,11 +34,18 @@ public class AccountController {
     public String updateDisplayName(@RequestParam("displayName") String displayName,
                                     @AuthenticationPrincipal OAuth2User principal) {
         String email = principal.getAttribute("email");
+        String accountName = principal.getAttribute("name");
         User user = userRepository.findByEmail(email);
 
         if (user != null) {
             user.setDisplayName(displayName);
             userRepository.save(user);
+        }else{//if user doesn't exist, really should never occur
+
+            User newUser = userRepository.save(new User( email, accountName));
+            newUser.setDisplayName(displayName);
+            userRepository.save(newUser);
+
         }
         return "redirect:/manage-account?success=true";
     }
@@ -54,6 +61,7 @@ public class AccountController {
 
         try {
             String email = principal.getAttribute("email");
+            String accountName = principal.getAttribute("name");
             User user = userRepository.findByEmail(email);
 
             if (user != null) {
@@ -64,6 +72,17 @@ public class AccountController {
                 Files.write(uploadPath, file.getBytes());
                 user.setProfilePicturePath("/uploads/" + fileName);
                 userRepository.save(user);
+
+            }else{ //if user doesn't exist, really should never occur
+                User newUser = userRepository.save(new User( email, accountName));
+
+                String fileName = "profile-" + newUser.getUserId() + ".png";
+                Path uploadPath = Paths.get(UPLOAD_DIRECTORY, fileName);
+
+                Files.createDirectories(uploadPath.getParent());
+                Files.write(uploadPath, file.getBytes());
+                newUser.setProfilePicturePath("/uploads/" + fileName);
+                userRepository.save(newUser);
             }
 
         } catch (IOException e) {
