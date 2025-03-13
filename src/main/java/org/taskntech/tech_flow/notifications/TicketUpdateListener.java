@@ -14,6 +14,7 @@ public class TicketUpdateListener {
         this.notificationController = notificationController;
     }
 
+    //when event TicketUpdateEvent is triggered
     @EventListener
     public void handleTicketUpdatedEvent(TicketUpdatedEvent event){
 
